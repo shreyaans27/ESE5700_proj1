@@ -246,7 +246,7 @@ Maximum energy test schematic for 8-bit ripple carry adder
 ![alt text](images/28t_CMOS/8b_RCA_32t_max_e_plot.bmp)
 
 <p align="center" style="font-size:14px; text-decoration: underline;">
-Maximum energy plot (Shows the Input, Output (Cout), Current at Vdd)
+Maximum energy plot (Shows the Input, Output (C<sub>out</sub>), Current at V<sub>dd</sub>)
 </p>
 
 ![alt text](images/28t_CMOS/32t_8b_RCA_max_e.png)
