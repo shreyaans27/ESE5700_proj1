@@ -227,7 +227,7 @@ Delay measurement from transient curve
 
 ----
 
-## 1.4 Baseline active energy max/avg measurements
+## 1.4 Baseline maximum and average active energy measurements
 
 - To evaluate the active energy consumption of the 8-bit ripple carry adder during addition operations, measurements were set up for two specific scenarios:
 
@@ -237,15 +237,154 @@ Delay measurement from transient curve
 
 - For both cases, the switching energy is calculated by integrating the power drawn from the power supply over time, starting from the moment the inputs begin switching until the outputs have fully transitioned. This integration captures the energy consumed during the dynamic operation of the adder as it processes the input changes and generates the output results.
 
-
 ![alt text](images/28t_CMOS/32t_8b_RCA_max_e_test.png)
+
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Maximum energy test schematic for 8-bit ripple carry adder
+</p>
 
 ![alt text](images/28t_CMOS/8b_RCA_32t_max_e_plot.bmp)
 
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Maximum energy plot (Shows the Input, Output (Cout), Current at Vdd)
+</p>
+
 ![alt text](images/28t_CMOS/32t_8b_RCA_max_e.png)
+
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Maximum energy calculation (absolute and integrating)
+</p>
+
+The current is integrated from the point when all inputs start switching from 0 to when all outputs stop switching at 1.
+
+Maximum active energy: **17.08 fJ**
 
 ![alt text](images/28t_CMOS/32t_8b_RCA_avg_e_test.png)
 
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Average energy test schematic for 8-bit ripple carry adder
+</p>
+
 ![alt text](images/28t_CMOS/8b_RCA_32t_avg_e_plot.bmp)
 
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Average energy plot (Shows the Input, Output (Cout), Current at Vdd)
+</p>
+
 ![alt text](images/28t_CMOS/32t_8b_RCA_avg_e.png)
+
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Average energy calculation (absolute and integrating)
+</p>
+
+The current is integrated from the point when all inputs start switching from 0 to when all outputs stop switching at 1.
+
+Average active energy: **10.27 fJ**
+
+----
+
+## 1.5 Baseline Leakage energy max/min cases and measurements
+
+For the leakage energy analysis of the 8-bit ripple carry adder, we considered eight key input test cases involving different configurations of **A**, **B**, and **C<sub>in</sub>** as mentioned in the truth table. The integration for measuring the leakage energy was conducted over **340.83 ps**, matching the delay period of the 8-bit adder to capture steady-state leakage when no switching occurred. 
+
+Transient response plots confirmed steady current behavior during these periods and showed energy spikes during active switching, allowing us to thoroughly assess the adder’s energy profile under different input conditions.
+
+![alt text](images/28t_CMOS/32t_1b_FA_leakage_e_test.png)
+
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Leakage energy test schematic
+</p>
+
+![alt text](images/28t_CMOS/8b_RCA_32t_leakage_e_plot.bmp)
+
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Leakage energy plot
+</p>
+
+![alt text](images/28t_CMOS/32t_1b_FA_leakage_energy.png)
+
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Leakage energy calculation
+</p>
+
+### Leakage Energy Table for All Inputs
+
+| Input Case | Energy over \( \tau_p \) | Energy for 8-bit RC Adder |
+|------------|---------------------------|----------------------------|
+| 000        | 4.534 fJ                  | 36.272 fJ                 |
+| 001        | 5.203 fJ                  | 41.624 fJ                 |
+| 010        | 3.664 fJ                  | **29.312 fJ** (Minimum)   |
+| 011        | 4.319 fJ                  | 34.552 fJ                 |
+| 100        | 4.76 fJ                   | 38.08 fJ                  |
+| 101        | 3.741 fJ                  | 29.928 fJ                 |
+| 110        | 3.709 fJ                  | 29.672 fJ                 |
+| 111        | 8.498 fJ                  | **67.984 fJ** (Maximum)   |
+
+- **Minimum leakage energy** for input case **010**: 29.312 fJ
+- **Maximum leakage energy** for input case **111**: 67.984 fJ
+
+# 2. Optimized Design and Methodology
+
+## 2.0 Topological Considerations
+
+For optimizing the 8-bit Ripple Carry Adder, we took two new topologies into consideration:
+
+- Ratio’d XOR2-NAND2 implementation
+- Mirror Full Adder
+
+In the next section, we will describe why we chose one design over the other.
+
+** *Note we have carried out active and leakage energy calculations only for 1 design which we felt was better. As one of the design have a lower delay but doesn't restore the output.* **
+
+## 2.1 Optimized Design Description, Schematics, and Test Schematics
+
+**Ratiod Full Adder:**
+
+### Description
+
+![alt text](images/Ratiod_Adder/topology_diag.png)
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Topology Diagram
+</p>
+
+Using the above topology, we can see that the sum of the full adder is generated by using 2 XOR2 gates in a chain topology. This simply implements the Boolean function:
+
+\[
+S = A \oplus B \oplus C_{in}
+\]
+
+Further, in the topology, the carry output is obtained by utilizing 3 NAND2 gates in a tree topology.
+
+Where:
+\[
+X = A \oplus B
+\]
+
+Thus:
+\[
+C_{out} = \overline{\left(\overline{\left((A \oplus B) \cdot C_{in}\right)} \cdot \overline{(A \cdot B)}\right)}
+\]
+
+
+which simplifies to:
+\[
+C_{out} = A \cdot B + A \cdot C_{in} + B \cdot C_{in}
+\]
+
+In this topology, each XOR2 gate uses 12 transistors (4 for 2 inverters and 8 for XOR2 implementation), and each ratio’d NAND2 gate uses 3 transistors (with a Pull-down Logic function). 
+
+In total, the topology has \(12 \times 2 + 3 \times 3 = 33\) transistors (15 PMOS, 18 NMOS).
+
+The critical path (path propagating the carry-out) is the tree topology of the three NAND2 gates. Therefore, we decided to use ratio’d logic to decrease the delay.
+
+### Schematics
+
+![alt text](images/Ratiod_Adder/ratiod_nand2_schem.png)
+
+![alt text](images/Ratiod_Adder/ratiod_1b_FA_schem.png)
+
+![alt text](images/Ratiod_Adder/ratiod_1b_FA_test.png)
+
+![alt text](images/Ratiod_Adder/ratiod_8b_RCA_schem.png)
+
+### Test Schematics
