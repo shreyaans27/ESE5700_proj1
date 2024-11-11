@@ -338,7 +338,7 @@ In the next section, we will describe why we chose one design over the other.
 
 ## 2.1 Optimized Design Description, Schematics, and Test Schematics
 
-**Ratiod Full Adder:**
+**Ratioed Full Adder:**
 
 ### Description
 
@@ -380,11 +380,99 @@ The critical path (path propagating the carry-out) is the tree topology of the t
 ### Schematics
 
 ![alt text](images/Ratiod_Adder/ratiod_nand2_schem.png)
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Ratioed nand2 schematic
+</p>
 
 ![alt text](images/Ratiod_Adder/ratiod_1b_FA_schem.png)
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Ratioed 1bit Full Adder Schematic
+</p>
 
 ![alt text](images/Ratiod_Adder/ratiod_1b_FA_test.png)
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Ratioed 1bit Full Adder Test Schematic
+</p>
 
 ![alt text](images/Ratiod_Adder/ratiod_8b_RCA_schem.png)
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Ratioed 8 bit Ripple Carry Adder Schematic
+</p>
 
-### Test Schematics
+### Propagation Delay Calculation
+
+![alt text](images/Ratiod_Adder/ratiod_8b_RCA_delay_test.png)
+
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Ratioed 8-bit Ripple Carry Adder-Delay test schematic
+</p>
+
+![alt text](images/Ratiod_Adder/ratiod_8b_RCA_delay_plot.bmp)
+
+<p align="center" style="font-size:14px; text-decoration: underline;">
+Delay Plot from transient analysis
+</p>
+
+| Parameter        | Calculation                        | Result     |
+|------------------|------------------------------------|------------|
+| \( \tau_{plh} \) | 20.22951 ns - 20.00881 ns          | 220.7 ps  |
+| \( \tau_{phl} \) | 24.22086 ns - 24.00658 ns          | 214.28 ps  |
+| \( \tau_p \)     | \( \frac{\tau_{plh} + \tau_{phl}}{2} \) | 217.49 ps |
+
+**Mirror Full Adder**
+
+### Description:
+
+### Schematics:
+
+All (L) n,p = 45nm, width =w, vdd=1.1V
+![alt text](images/Mirror_adder/24t_Mirror_FA_schem.png)
+<p align="center" style="font-size:14px; text-decoration: underline;">
+1 bit Mirror Adder Schematic
+
+</p>
+
+![alt text](images/Mirror_adder/24t_1b_FA_test.png)
+<p align="center" style="font-size:14px; text-decoration: underline;">
+1 bit Mirror Adder Test Schematic
+
+ 
+
+### 1 bit full adder verification: 
+
+Cin is connected to Vpulse of period =8ns, pulse width= 4ns,
+ V1=0V,
+  V2=1.1V  
+
+B is connected to Vpulse of period =16ns, pulse width = 8ns, V1=0V, V2=1.1V  
+
+A is connected to Vpulse of period =32ns, pulse width =16ns, V1=0V, V2=1.1V  
+
+tr,tf=1ps, delay=0s → additional details about vpulse 
+
+vdd= vdc=1.1V 
+
+ 
+
+ 
+
+ 
+</p>
+
+![alt text](images/Mirror_adder/1b_24t_FA_verif_plot.bmp)
+
+<p align="center" style="font-size:14px; text-decoration: underline;">
+1bit full adder verification plot
+</p>
+
+
+![alt text](images/Mirror_adder/24t_8b_RCA_schem.png)
+<p align="center" style="font-size:14px; text-decoration: underline;">
+8 bit Ripple carry adder schematic
+</p>
+
+![alt text](images/Mirror_adder/24t_delay_test_new.png)
+
+<p align="center" style="font-size:14px; text-decoration: underline;">
+8 bit Ripple carry adder delay test schematic
+</p>
