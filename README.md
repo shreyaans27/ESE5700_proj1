@@ -25,9 +25,9 @@
 
 The baseline design is centered around implementing a full adder circuit using complementary static CMOS technology. The design adheres to fundamental logic equations for sum and carry outputs, specifically:
 
-Carry-out Boolean Function = $ C_{out} = A \cdot B + B \cdot C_{in} + A \cdot C_{in} $
+Carry-out Boolean Function = $C_{out} = A \cdot B + B \cdot C_{in} + A \cdot C_{in}$
 
-Sum Boolean Function = $ S = A \cdot B \cdot C_{in} + \overline{C_{out}} \cdot (A + B + C_{in}) $
+Sum Boolean Function = $S = A \cdot B \cdot C_{in} + \overline{C_{out}} \cdot (A + B + C_{in}) $
 
 ### Overview
 
